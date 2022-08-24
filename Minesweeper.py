@@ -45,37 +45,43 @@ class MineBoard:
         for bomb in self.bombSpots:
             row = bomb[0]
             col = bomb[1]
-            self.board[col][row] = 'M'
+            self.board[row][col] = 'M'
 
+            self.assignBombValues(row,col)
+
+    def assignBombValues(self, row, col):
             # iterate over neighboring x positions
-            for i in range(max(0, col - 1), min(col + 1, self.length-1)):
-                
+            for i in range(max(0, row - 1), min(row+1, self.length-1)  + 1):
                 # iterate over neighboring y positions
-                for j in range(max(0, row - 1), min(row + 1, self.length-1)):
-                    
-                    # this is the bomb we are updating
+                for j in range(max(0, col - 1), min(col+1, self.length-1) + 1):
+                    # if this is not a space with a bomb, mark it with a neighbor
                     if self.board[i][j] != 'M':
                         self.board[i][j] += 1
+                    continue
+                    
 
     def dig(self, row, col):
 
         self.dug.add((row, col))
         if self.board[row][col] == 'M':
             # game over
+            # the board state when you lost
             return False
 
         # if i have no mine neighbors, dig all my neighbors
         if self.board[row][col] == 0:
             # iterate over neighboring x positions
-            for i in range(max(0, col - 1), min(col + 1, self.length-1)):
+            for i in range(max(0, row - 1), min(row + 1, self.length-1)+1):
                 
                 # iterate over neighboring y positions
-                for j in range(max(0, row - 1), min(row + 1, self.length-1)):
+                for j in range(max(0, col - 1), min(col + 1, self.length-1)+1):
                     
-                    # this is not the spot we just dug
-                    if i != col and j != row:
+                    # this is not a spot we have dug
+                    if (i,j) not in self.dug:
                         # so we dig
                         self.dig(i, j)
+                    
+                    continue
 
         return True
 
@@ -83,17 +89,21 @@ class MineBoard:
         # what is returned when I turn into a string
 
         # create array that the user will see
-        visibleBoard = self.board
+        visibleBoard = [[None for _ in range(self.length)] for _ in range(self.length)]
         for row in range(self.length):
             for col in range(self.length):
-                if (row,col) not in self.dug:
-                    visibleBoard[row][col] = ' '
+                # if this spot has been dug display it
+                if (row,col) in self.dug:
+                    visibleBoard[row][col] = str(self.board[row][col])
+                    continue
+
+                visibleBoard[row][col] = ' '
 
         # put this together in a string
         string_rep = ''
         # get max column widths for printing
         widths = []
-        for idx in range(self.dim_size):
+        for idx in range(self.length):
             columns = map(lambda x: x[idx], visibleBoard)
             widths.append(
                 len(
@@ -102,7 +112,7 @@ class MineBoard:
             )
 
         # print the csv strings
-        indices = [i for i in range(self.dim_size)]
+        indices = [i for i in range(self.length)]
         indices_row = '   '
         cells = []
         for idx, col in enumerate(indices):
@@ -121,7 +131,7 @@ class MineBoard:
             string_rep += ' |'.join(cells)
             string_rep += ' |\n'
 
-        str_len = int(len(string_rep) / self.dim_size)
+        str_len = int(len(string_rep) / self.length)
         string_rep = indices_row + '-'*str_len + '\n' + string_rep + '-'*str_len
 
         return string_rep
@@ -132,28 +142,34 @@ def play(board_size=10, numBombs=10):
     game = MineBoard(board_size, numBombs)
 
 # step 4: repeat from step 2 until all non-mine spots are revealed, Win!
-    while len(game.dug) < game.length ** 2 - numBombs:
+    while len(game.dug) < (game.length ** 2) - numBombs:
         # the board state
         print(game)
 
         # step 2: ask user for spot on the board
-        dig = re.split(',(\\s)*', input("Where would you like to dig? (answer in format \"column,row\"): "))
-        col, row = int(dig[0]), int(dig[-1])
+        dig = re.split(',(\\s)*', input("Where would you like to dig? (answer in format \"row,column\"): "))
+        if len(dig) < 2:
+            print("Error, invalid argument given")
+
+        row, col = int(dig[0]), int(dig[-1])
 
         if col < 0 or col >= game.length or row < 0 or row >= game.length:
             print("Error, index out of bounds, try again.")
             continue
 
+        
+        # step 3b: reveal the spot, and any adjacent spots if it was a 0
+        safe = game.dig(row,col)
+
         # step 3a: check if spot was a mine, if it was game over
-        safe = game.dig(dig)
         if not safe:
             print("kaboom")
             for spot in game.bombSpots:
                 game.dig(spot[0], spot[1])
+                
+            # the board state as they lost
+            print(game)
             break
-
-        # step 3b: reveal the spot, and any adjacent spots if it was a 0
-        game.dig(dig)
 
     
 
