@@ -34,7 +34,7 @@ class MineBoard:
 
     def buildBoard(self, length):
         # make array that is the right size and initialized to 0
-        self.board = [[0 for j in range(length)] for i in range(length)]
+        self.board = [[0 for _ in range(length)] for _ in range(length)]
 
         # plant the bombs and increment all it's neighbors (that are not also bombs)
         self.assignValuesToBoard()
@@ -77,6 +77,53 @@ class MineBoard:
                         self.dig(i, j)
 
         return True
+
+    def __str__(self):
+        # what is returned when I turn into a string
+
+        # create array that the user will see
+        visibleBoard = self.board
+        for row in range(self.length):
+            for col in range(self.length):
+                if (row,col) not in self.dug:
+                    visibleBoard[row][col] = ' '
+
+        # put this together in a string
+        string_rep = ''
+        # get max column widths for printing
+        widths = []
+        for idx in range(self.dim_size):
+            columns = map(lambda x: x[idx], visibleBoard)
+            widths.append(
+                len(
+                    max(columns, key = len)
+                )
+            )
+
+        # print the csv strings
+        indices = [i for i in range(self.dim_size)]
+        indices_row = '   '
+        cells = []
+        for idx, col in enumerate(indices):
+            format = '%-' + str(widths[idx]) + "s"
+            cells.append(format % (col))
+        indices_row += '  '.join(cells)
+        indices_row += '  \n'
+        
+        for i in range(len(visibleBoard)):
+            row = visibleBoard[i]
+            string_rep += f'{i} |'
+            cells = []
+            for idx, col in enumerate(row):
+                format = '%-' + str(widths[idx]) + "s"
+                cells.append(format % (col))
+            string_rep += ' |'.join(cells)
+            string_rep += ' |\n'
+
+        str_len = int(len(string_rep) / self.dim_size)
+        string_rep = indices_row + '-'*str_len + '\n' + string_rep + '-'*str_len
+
+        return string_rep
 
 # play the game
 def play(board_size=10, numBombs=10):
