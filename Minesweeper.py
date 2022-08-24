@@ -65,6 +65,7 @@ class MineBoard:
         self.dug.add((row, col))
         if self.board[row][col] == 'M':
             # game over
+            self.board[row][col] = 'X'
             # the board state when you lost
             return False
 
@@ -166,7 +167,7 @@ def play(board_size=10, numBombs=10):
             print("kaboom")
             for spot in game.bombSpots:
                 game.dig(spot[0], spot[1])
-                
+
             # the board state as they lost
             print(game)
             break
