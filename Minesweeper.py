@@ -4,6 +4,7 @@
 # provide access to: board state, helper function for digging (also flags) at locations aka, altering the board state.
 # just the one helper function because minesweeper is a tiny game
 import random
+import re
 from time import sleep
 
 class MineBoard:
@@ -57,11 +58,11 @@ class MineBoard:
                         self.board[i][j] += 1
 
     def dig(self, row, col):
+
+        self.dug.add((row, col))
         if self.board[row][col] == 'M':
             # game over
             return False
-
-        self.dug.add((row, col))
 
         # if i have no mine neighbors, dig all my neighbors
         if self.board[row][col] == 0:
@@ -130,23 +131,29 @@ def play(board_size=10, numBombs=10):
     # step 1: make board
     game = MineBoard(board_size, numBombs)
 
+# step 4: repeat from step 2 until all non-mine spots are revealed, Win!
+    while len(game.dug) < game.length ** 2 - numBombs:
+        # the board state
+        print(game)
 
-    # step 2: ask user for spot on the board
-    dig = input("where would you like to dig? (answer in format \"(column, row)\"): ")
+        # step 2: ask user for spot on the board
+        dig = re.split(',(\\s)*', input("Where would you like to dig? (answer in format \"column,row\"): "))
+        col, row = int(dig[0]), int(dig[-1])
 
-    # step 3a: check if spot was a mine, if it was game over
-    if dig in game.bombSpots:
-        print("kaboom")
-        return False
+        if col < 0 or col >= game.length or row < 0 or row >= game.length:
+            print("Error, index out of bounds, try again.")
+            continue
 
-    # step 3b: reveal the spot, and any adjacent spots if it was a 0
-    game.dig(dig)
+        # step 3a: check if spot was a mine, if it was game over
+        safe = game.dig(dig)
+        if not safe:
+            print("kaboom")
+            for spot in game.bombSpots:
+                game.dig(spot[0], spot[1])
+            break
 
-    # step 4: repeat from step 2 until all non-mine spots are revealed, Win!
-
-
-
-
+        # step 3b: reveal the spot, and any adjacent spots if it was a 0
+        game.dig(dig)
 
     
 
