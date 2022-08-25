@@ -170,9 +170,9 @@ def play(board_size=10, numBombs=10):
 
             # the board state as they lost
             print(game)
-            break
+            return
 
-    
+    print("Congratulations! You win!")
 
     return None
 
