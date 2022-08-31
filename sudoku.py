@@ -4,7 +4,6 @@
 
 # puzzle.board = [][] (9x9 by default)
 
-from ast import main
 from random import randint
 
 def find_next_empty(puzzle):
