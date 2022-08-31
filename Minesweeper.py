@@ -178,5 +178,5 @@ def play(board_size=10, numBombs=10):
 
 if __name__ == '__main__':
     
-    play()
+    play(3, 1)
     
