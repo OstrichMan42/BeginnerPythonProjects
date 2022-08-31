@@ -4,6 +4,7 @@
 
 # puzzle.board = [][] (9x9 by default)
 
+from ast import main
 from random import randint
 
 def find_next_empty(puzzle):
@@ -57,10 +58,7 @@ def solve_sudoku(puzzle):
         return True
 
     # step 2: if there is a place to put a number, then make a guess between 1 and 9
-    guess = randint(1, 9)
-    guessed = set()
-
-    while len(guessed) < 9:
+    for guess in range(1, 10):
         # step 3: check if this is a valid guess
         if is_valid(puzzle, guess, row, col):
 
@@ -73,10 +71,51 @@ def solve_sudoku(puzzle):
 
         # step 5: it not valid or if nothing gets returned true, then we need to backtrack and try a new number
         puzzle[row][col] = -1
-        guessed.add(guess)
-        guess = 1
-        while guess in guessed:
-            guess += 1
 
     # step 6: if none of the numbers that we try work, then this puzzle is UNSOLVABLE!!
     return False
+
+
+if __name__ == '__main__':
+    # invalidBoard = [
+    # [5, 3, 4, 6, 7, 9, 8, 1, 2],
+    # [6, 7, 2, 1, 9, 5, 3, 4, 7],
+    # [6, 9, 8, 3, 4, 2, 7, 6, 5],
+
+    # [8, 5, 9, 7, 6, 1, 4, 2, 1],
+    # [4, 2, 6, 8, 5, 3, 7, 8, 1],
+    # [7, 1, 3, 9, 2, 4, 8, 5, 6],
+
+    # [9, 6, 1, 5, 3, 7, 2, 8, 4],
+    # [2, 8, 7, 4, 1, 9, 6, 3, 5],
+    # [3, 4, 5, 2, 8, 6, 1, 8, 8]
+    # ]
+    # validBoard = [
+    # [5, 3, 4, 6, 7, 8, 9, 1, 2],
+    # [6, 7, 2, 1, 9, 5, 3, 4, 8],
+    # [1, 9, 8, 3, 4, 2, 5, 6, 7],
+
+    # [8, 5, 9, 7, 6, 1, 4, 2, 3],
+    # [4, 2, 6, 8, 5, 3, 7, 9, 1],
+    # [7, 1, 3, 9, 2, 4, 8, 5, 6],
+
+    # [9, 6, 1, 5, 3, 7, 2, 8, 4],
+    # [2, 8, 7, 4, 1, 9, 6, 3, 5],
+    # [3, 4, 5, 2, 8, 6, 1, 7, 9]
+    # ]
+    puzzle = [
+    [5, 3, -1, 6, 7, -1, -1, 1, 2],
+    [6, -1, 2, 1, -1, 5, -1, 4, 8],
+    [1, 9, -1, 3, 4, 2, 5, 6, 7],
+
+    [-1, -1, -1, -1, 6, 1, 4, -1, 3],
+    [-1, -1, 6, -1, 5, -1, 7, 9, 1],
+    [-1, 1, -1, -1, 2, 4, 8, 5, 6],
+
+    [9, -1, -1, 5, -1, 7, 2, 8, 4],
+    [2, -1, 7, 4, 1, -1, 6, 3, 5],
+    [-1, 4, -1, 2, 8, -1, 1, -1, -1]
+    ]
+    print(puzzle)
+    print(solve_sudoku(puzzle))
+    print(puzzle)
