@@ -6,7 +6,6 @@
 
 from random import randint
 
-
 def find_next_empty(puzzle):
     # finds the next row, col on puzzle that's not filled yet --> we represent these with -1
     # returns a row, col tuple (or (None, None) if there is none)
@@ -22,21 +21,21 @@ def is_valid(puzzle, guess, row, col):
 
     # sudoku rules
     # check own box
-    # iterate over neighboring x positions
-    for r in range(max(0, row-1), min(row+1, 9-1)):
-        # iterate over neighboring y positions
-        for c in range(max(0, col-1), min(col+1, 9-1)):
-            # skip my own box
-            if row == row and col == col: continue
 
-            # now check the inner column
-            if guess in puzzle[row][col]:
-                pass
+    # iterate over neighboring rows
+    for r in range(3 * min(2, row//3), max(8, row + (2-(row)%3))):
+        # iterate over neighboring columns
+        for c in range(3 * min(2, col//3), max(8, col + (2-(col)%3))):
+            # skip my own box
+            if r == row and c == col: continue
+
+            if guess == puzzle[row][col]:
+                return False
 
     # check row and column
     for r in puzzle[row]:
         if guess in r: return False
-    for c in [puzzle[i-1][col] for i in range(3)]:
+    for c in [puzzle[i][col] for i in range(3)]:
         if guess in c: return False
 
 
@@ -61,6 +60,7 @@ def solve_sudoku(puzzle):
     # step 2: if there is a place to put a number, then make a guess between 1 and 9
     guess = randint(1, 9)
     guessed = set()
+
     while len(guessed) < 9:
         # step 3: check if this is a valid guess
         if is_valid(puzzle, guess, row, col):
