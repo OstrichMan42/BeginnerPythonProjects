@@ -16,7 +16,13 @@ import numpy as np
 def brighten(image, factor):
     # when we brighten, we just want to make each channel higher by some amount 
     # factor is a value > 0, how much you want to brighten the image by (< 1 = darken, > 1 = brighten)
-    pass
+
+    x_pixels, y_pixels, num_channels = image.array.shape
+
+    # make a new image to overwrite
+    newImage = Image(x_pixels, y_pixels, num_channels)
+
+    
 
 def adjust_contrast(image, factor, mid):
     # adjust the contrast by increasing the difference from the user-defined midpoint by factor amount
