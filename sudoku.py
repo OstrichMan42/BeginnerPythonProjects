@@ -11,7 +11,7 @@ def find_next_empty(puzzle):
     # returns a row, col tuple (or (None, None) if there is none)
     for row in range(9):
         for col in range(9):
-            if puzzle[row][col] == -1: return True
+            if puzzle[row][col] == -1: return row, col
 
     return (None, None)
 
