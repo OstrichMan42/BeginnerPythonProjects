@@ -22,9 +22,9 @@ def is_valid(puzzle, guess, row, col):
     # sudoku rules
     # check own box
 
-    # iterate over neighboring rows
+    # iterate over rows in box
     for r in range(3 * min(2, row//3), max(8, row + (2-(row)%3))):
-        # iterate over neighboring columns
+        # iterate over columns in box
         for c in range(3 * min(2, col//3), max(8, col + (2-(col)%3))):
             # skip my own box
             if r == row and c == col: continue
@@ -33,10 +33,8 @@ def is_valid(puzzle, guess, row, col):
                 return False
 
     # check row and column
-    for r in puzzle[row]:
-        if guess in r: return False
-    for c in [puzzle[i][col] for i in range(3)]:
-        if guess in c: return False
+    if guess in puzzle[row]: return False
+    if guess in [puzzle[i][col] for i in range(9)]: return False
 
 
     return True
