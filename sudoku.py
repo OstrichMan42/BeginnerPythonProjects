@@ -21,11 +21,12 @@ def is_valid(puzzle, guess, row, col):
 
     # sudoku rules
     # check own box
-
+    row_start = 3 * row//3
+    col_start = 3 * col//3
     # iterate over rows in box
-    for r in range(3 * min(2, row//3), max(8, row + (2-(row)%3))):
+    for r in range(row_start, row_start+3):
         # iterate over columns in box
-        for c in range(3 * min(2, col//3), max(8, col + (2-(col)%3))):
+        for c in range(col_start, col_start+3):
             # skip my own box
             if r == row and c == col: continue
 
