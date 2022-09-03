@@ -4,4 +4,3 @@ pyphotoshop/__pycache__/*
 
 # Byte-compiled / optimized / DLL files
 graph-composer/__pycache__/
-graph-composer/*.py[cod]
