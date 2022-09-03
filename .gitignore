@@ -1,54 +1,54 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-
 # "Photoshopped" files
 pyphotoshop/output/*
 pyphotoshop/__pycache__/*
 
+# Byte-compiled / optimized / DLL files
+graph-composer/__pycache__/
+graph-composer/*.py[cod]
+
 # C extensions
-*.so
+graph-composer/*.so
 
 # Distribution / packaging
-bin/
-build/
-graph-composer/develop-eggs/
-dist/
-eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-*.egg-info/
-.installed.cfg
-*.egg
+graph-composer/bin/
+graph-composer/build/
+graph-composer/graph-composer/develop-eggs/
+graph-composer/dist/
+graph-composer/eggs/
+graph-composer/lib/
+graph-composer/lib64/
+graph-composer/parts/
+graph-composer/sdist/
+graph-composer/var/
+graph-composer/*.egg-info/
+graph-composer/.installed.cfg
+graph-composer/*.egg
 
 # Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
+graph-composer/pip-log.txt
+graph-composer/pip-delete-this-directory.txt
 
 # Unit test / coverage reports
-.tox/
-.coverage
-.cache
-nosetests.xml
-coverage.xml
+graph-composer/.tox/
+graph-composer/.coverage
+graph-composer/.cache
+graph-composer/nosetests.xml
+graph-composer/coverage.xml
 
 # Translations
-*.mo
+graph-composer/*.mo
 
 # Mr Developer
-.mr.developer.cfg
-.project
-.pydevproject
+graph-composer/.mr.developer.cfg
+graph-composer/.project
+graph-composer/.pydevproject
 
 # Rope
-.ropeproject
+graph-composer/.ropeproject
 
 # Django stuff:
-*.log
-*.pot
+graph-composer/*.log
+graph-composer/*.pot
 
 # Sphinx documentation
-docs/_build/
+graph-composer/docs/_build/
