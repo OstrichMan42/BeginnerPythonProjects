@@ -1,1 +1,2 @@
-pyphotoshop\output\*
+pyphotoshop/output/*
+pyphotoshop/__pycache__/*
