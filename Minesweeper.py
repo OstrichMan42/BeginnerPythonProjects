@@ -5,7 +5,6 @@
 # just the one helper function because minesweeper is a tiny game
 import random
 import re
-from time import sleep
 
 class MineBoard:
     def __init__(self, length, numBombs) -> None:
