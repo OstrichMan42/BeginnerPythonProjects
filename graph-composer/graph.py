@@ -38,7 +38,7 @@ class Vertex(object):
 
     def next_word(self):
         # pick random adjacent neighbor, favoring weighted edges
-        return random.choices(self.neighbors, self.neighborWeights)
+        return random.choices(self.neighbors, weights=self.neighborWeights)[0]
         
 
 
@@ -50,7 +50,7 @@ class Graph(object):
 
     def get_vertex_values(self):
         # values of all verticies
-        return set(self.verticies.keys)
+        return set(self.verticies.keys())
 
     def add_vertex(self, value):
         self.verticies[value] = Vertex(value)
@@ -62,8 +62,8 @@ class Graph(object):
         return self.verticies[value]
 
     def get_next_word(self, current_vertex):
-        self.verticies[current_vertex.value].next_word()
+        return self.verticies[current_vertex].next_word()
 
     def generate_probability_mappings(self):
-        for vertex in self.verticies.values:
+        for vertex in self.verticies.values():
             vertex.get_probability_map()

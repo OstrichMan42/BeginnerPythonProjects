@@ -19,17 +19,65 @@ import random
 from graph import Graph, Vertex
 
 def get_words_from_text(text_path):
-    pass
+    with open(text_path, 'r') as f:
+        text = f.read()
+
+        # remove text in brackets
+        text = re.sub(r'\[(.+)\]', ' ', text)
+
+        text = ' '.join(text.split()) # replace all whitespace with a single space
+        text = text.lower() # make lower case
+        
+        # just remove all the punctuation
+        text = text.translate(str.maketrans('','', string.punctuation))
+    
+    return text.split()
 
 def make_graph(words):
-    pass
+    g = Graph()
+    prev_word = None
+    for word in words:
+        # get the vertex to add edges to, creates one if it doesn't exist
+        word_vertex = g.get_vertex(word)
+        if prev_word:
+            prev_word.increment_edge(word_vertex)
+        prev_word = word_vertex
+    g.generate_probability_mappings()
+    return g
+
 
 def compose(g, words, length=50):
-    pass
+    composition = []
+    word = g.get_vertex(random.choice(words))
+    while len(composition) < length:
+        composition.append(word.value)
+        word = g.get_next_word(word.value)
+    return composition
 
-def main():
-    pass
+
+def main(artist):
+    # step 1 : get words from text
+    # words = get_words_from_text('texts/hp_sorcerer_stone.txt')
+
+    # for song lyrics
+    words = []
+    for songFile in os.listdir(f'songs/{artist}'):
+        if songFile == '.DS_Store': continue
+
+        songWords = get_words_from_text(f'songs/{artist}/{songFile}')
+    
+    words.extend(songWords)
+
+    # step 2 : make a  graph using these words
+    g = make_graph(songWords)
+
+    # step 3 : get the next word from the graph a number of times chosen by the user
+    composition = compose(g, songWords, 20)
+
+    # step 4 : show the user!
+    return ' '.join(composition)
 
 
 if __name__ == '__main__':
-    main()
+    artist = 'green_day'
+    print(main(artist))
