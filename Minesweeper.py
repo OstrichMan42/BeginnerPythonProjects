@@ -176,6 +176,8 @@ def play(board_size=10, numBombs=10):
     return None
 
 if __name__ == '__main__':
-    
-    play(3, 1)
+    rules = re.split(',(\\s)*', input("What size and how many mines and should the board be/have? (answer in format \"size,mines\"): "))
+    if len(rules) < 2:
+        print("Error, invalid argument given")
+    play(int(rules[0]), int(rules[-1]))
     
