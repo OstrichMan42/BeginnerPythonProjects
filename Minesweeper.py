@@ -172,6 +172,7 @@ def play(board_size=10, numBombs=10):
             return
 
     print("Congratulations! You win!")
+    print(game)
 
     return None
 
